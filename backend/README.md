@@ -2,6 +2,16 @@
 
 `npm start`
 
+## 라이브러리 설치
+
+`npm install express ws aws-sdk dotenv cors`
+
+- express → API 서버 (WebSocket을 보조할 수도 있음)
+- ws → WebSocket 서버 구현
+- aws-sdk → AWS Lambda, DynamoDB 연동
+- dotenv → 환경 변수 관리
+- cors → CORS 정책 설정 (프론트엔드와 통신)
+
 ## 📂 backend 디렉토리 구조
 
 backend/
