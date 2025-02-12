@@ -38,9 +38,9 @@ wss.on("connection", (ws) => {
     console.log(`📨 받은 메시지: ${message}`);
 
     // 모든 클라이언트에게 메시지 브로드캐스트
-    clients.forEach((client) => {
-      if (client !== ws && client.readyState === ws.OPEN) {
-        client.send(message);
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message); // ✅ 메시지 전송
       }
     });
   });
