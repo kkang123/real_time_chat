@@ -98,6 +98,7 @@ function App() {
   // useRef를 사용하면 연결 객체가 초기화되지 않고 유지되므로
   // 한 번 연결된 WebSocket을 계속 사용할 수 있습니다.
   // null인 이유는 초기에는 객체가 존재하지 않기 때문
+  const messagesEndRef = useRef(null); // 스크롤 고정을 위한 ref
 
   // WebSocket 연결
   useEffect(() => {
@@ -131,6 +132,11 @@ function App() {
     }
   };
 
+  // 📌 메시지가 추가될 때마다 스크롤을 최하단으로 이동
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">💬 실시간 채팅</h1>
@@ -153,6 +159,7 @@ function App() {
         ) : (
           <p className="text-center text-gray-500">메시지가 없습니다.</p>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="flex w-full max-w-md">
