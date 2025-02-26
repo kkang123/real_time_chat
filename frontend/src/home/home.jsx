@@ -66,7 +66,7 @@ function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4">💬 실시간 채팅 (UUID 방식)</h1>
+      <h1 className="text-2xl font-bold mb-4">💬 실시간 채팅</h1>
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-4 mb-4 overflow-y-auto h-96 border border-blue-500">
         {messages.length > 0 ? (
