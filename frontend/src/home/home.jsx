@@ -6,7 +6,7 @@ const WEBSOCKET_URL = "ws://localhost:8080"; // WebSocket 서버 주소
 function Home() {
   const [messages, setMessages] = useState([]); // 채팅 메시지 상태
   const [input, setInput] = useState(""); // 입력 필드 상태
-  const [userId] = useState(() => uuidv4()); // 사용자 UUID 생성
+  const [userId, setUserId] = useState(null); // 사용자 UUID를 서버로부터 받아와서 저장
   const ws = useRef(null); // WebSocket 인스턴스
   const isComposing = useRef(false); // 한글 조합 상태를 추적하기 위한 ref
   const messagesEndRef = useRef(null); // 스크롤 고정을 위한 ref
@@ -20,8 +20,15 @@ function Home() {
     };
 
     ws.current.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages((prev) => [...prev, newMessage]);
+      const data = JSON.parse(event.data);
+
+      if (data.type === "assignId") {
+        setUserId(data.userId); // 서버에서 받은 UUID 저장
+        console.log("🆔 서버에서 받은 userId:", data.userId);
+        return;
+      }
+
+      setMessages((prev) => [...prev, data]);
     };
 
     ws.current.onclose = () => {

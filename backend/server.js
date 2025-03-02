@@ -67,18 +67,22 @@ const wss = new WebSocketServer({ port: 8080 });
 const clients = new Map();
 
 wss.on("connection", (ws) => {
-  // 새로운 사용자에게 UUID 발급
-  const userId = uuidv4();
+  const userId = uuidv4(); // 서버에서 UUID 생성
   clients.set(userId, ws);
+
+  // 클라이언트에게 UUID 전송
+  ws.send(JSON.stringify({ type: "assignId", userId }));
 
   console.log(`✅ 새 사용자 연결됨: ${userId}`);
 
   ws.on("message", (message) => {
     try {
       const data = JSON.parse(message);
+      if (!data.senderId) return; // senderId가 없으면 무시
+
       const chatMessage = {
         id: uuidv4(), // 메시지 ID
-        senderId: userId, // 보낸 사람의 UUID
+        senderId: data.senderId, // 보낸 사람의 UUID
         text: data.text, // 메시지 내용
         timestamp: new Date().toISOString(),
       };
