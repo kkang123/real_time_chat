@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import useNicknameStore from "../store/chatStore"; // 닉네임 상태 가져오기
 
 const WEBSOCKET_URL = "ws://localhost:8080"; // WebSocket 서버 주소
 
@@ -10,6 +11,12 @@ function Chat() {
   const ws = useRef(null); // WebSocket 인스턴스
   const isComposing = useRef(false); // 한글 조합 상태를 추적하기 위한 ref
   const messagesEndRef = useRef(null); // 스크롤 고정을 위한 ref
+
+  const nickname = useNicknameStore((state) => state.nickname); // Zustand에서 닉네임 가져오기
+
+  useEffect(() => {
+    console.log("✅ 현재 저장된 닉네임:", nickname); // 추가된 디버깅 코드
+  }, []);
 
   // WebSocket 연결
   useEffect(() => {
@@ -48,6 +55,7 @@ function Chat() {
       const chatMessage = {
         id: uuidv4(), // 각 메시지에 고유 ID 부여
         senderId: userId,
+        senderName: nickname, // 닉네임 추가
         text: input,
         timestamp: new Date().toISOString(),
       };
@@ -86,9 +94,8 @@ function Chat() {
                   : "bg-gray-200 text-left"
               }`}
             >
-              <p className="text-sm text-gray-600">
-                {msg.senderId === userId ? "나" : "상대방"}
-              </p>
+              <p className="text-sm text-gray-600">{msg.senderName}</p>
+
               <p className="font-medium">{msg.text}</p>
             </div>
           ))

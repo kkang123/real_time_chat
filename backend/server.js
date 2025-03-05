@@ -83,6 +83,7 @@ wss.on("connection", (ws) => {
       const chatMessage = {
         id: uuidv4(), // 메시지 ID
         senderId: data.senderId, // 보낸 사람의 UUID
+        senderName: data.senderName,
         text: data.text, // 메시지 내용
         timestamp: new Date().toISOString(),
       };
