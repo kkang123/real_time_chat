@@ -16,7 +16,8 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.5",
     "recoil": "^0.7.7",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
