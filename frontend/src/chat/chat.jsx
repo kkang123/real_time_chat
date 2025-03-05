@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const WEBSOCKET_URL = "ws://localhost:8080"; // WebSocket 서버 주소
 
-function Home() {
+function Chat() {
   const [messages, setMessages] = useState([]); // 채팅 메시지 상태
   const [input, setInput] = useState(""); // 입력 필드 상태
   const [userId, setUserId] = useState(null); // 사용자 UUID를 서버로부터 받아와서 저장
@@ -124,4 +124,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Chat;
