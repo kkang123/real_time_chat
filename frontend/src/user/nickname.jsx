@@ -15,6 +15,12 @@ function Nickname() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">닉네임 설정</h1>
@@ -22,6 +28,7 @@ function Nickname() {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleKeyDown}
         className="p-2 border rounded"
         placeholder="닉네임 입력"
       />
