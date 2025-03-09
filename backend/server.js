@@ -7,11 +7,35 @@ const wss = new WebSocketServer({ port: 8080 });
 // 연결된 클라이언트 관리
 const clients = new Map();
 
+// 만료 시간 갱신 함수 (미리 정의)
+const updateExpiryTime = (userId) => {
+  const client = clients.get(userId);
+  if (client) {
+    // 만료 시간 갱신 (현재 시간 + 10분)
+    const newExpiryTime = new Date(Date.now() + 600000).toISOString();
+
+    client.expiryTime = newExpiryTime;
+    clients.set(userId, client);
+
+    // 클라이언트에게 갱신된 만료 시간 알림
+    client.ws.send(
+      JSON.stringify({
+        type: "expiryUpdate",
+        expiryTime: newExpiryTime,
+      })
+    );
+
+    console.log(`⏰ ${userId}의 만료 시간 갱신: ${newExpiryTime}`);
+    return newExpiryTime;
+  }
+  return null;
+};
+
 wss.on("connection", (ws) => {
   const userId = uuidv4(); // 서버에서 UUID 생성
 
-  // 만료 시간 설정 (현재 시간 + 1분)
-  const expiryTime = new Date(Date.now() + 600000).toISOString(); // 1분 = 60000 밀리초
+  // 만료 시간 설정 (현재 시간 + 10분)
+  const expiryTime = new Date(Date.now() + 600000).toISOString(); // 10분 = 600000 밀리초
 
   clients.set(userId, {
     ws,
@@ -59,6 +83,11 @@ wss.on("connection", (ws) => {
           })
         );
         return;
+      }
+
+      // 메시지 전송 시 만료 시간 갱신 요청이 있는 경우
+      if (data.updateExpiry) {
+        updateExpiryTime(data.senderId);
       }
 
       const chatMessage = {
